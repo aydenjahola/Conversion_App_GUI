@@ -4,69 +4,39 @@ from PIL import ImageTk,Image
 import pandas as pd
 from tkinter import ttk, filedialog
 from tkinter import messagebox
-from ttkthemes import ThemedTk, THEMES
+import customtkinter
 
+customtkinter.set_appearance_mode("dark")  # Modes: system (default), light, dark
+customtkinter.set_default_color_theme("dark-blue")  # Themes: blue (default), dark-blue, green
 
-App = ThemedTk(themebg=True)
-App.set_theme('blue')
+App = customtkinter.CTk()
 App.title('Conversion App')
-App.geometry('450x210')
+App.geometry('500x210')
 App.iconbitmap("img\\logo.ico")
 App.resizable(True, True)
 scales = ['Celsius', 'Fahrenheit', 'Miles', 'Kilometres', 'Stones', 'Kilograms', 'Litres', 'Pints', 'Acres', 'Hectares', 'Euro', 'USD', 'GBP']
 
 
-def change_theme(theme, e=None):
-    try:
-        App.set_theme(theme)
-    except:
-        pass
-
-
-
-tc = ttk.Combobox(App, values=THEMES)
-tc.grid(row=15, column=0, pady=5)
-tc.set('Change Theme')
-tc.bind("<<ComboboxSelected>>",lambda e:change_theme(tc.get()))
-
-
-
 
 def open():
     global dic
-    dic = Toplevel()
+    dic = customtkinter.CTkToplevel()
     dic.title('Python Dictionary')
     dic.geometry('1040x600')
     dic.iconbitmap("img\\logo.ico")
     dic.resizable(True, True)
 
     
-    lbl1 = Label(dic, text='Python Dictionary').pack()
+    lbl1 = customtkinter.CTkLabel(dic, text='Python Dictionary').pack()
 
-    my_frame = Frame(dic)
+    my_frame = customtkinter.CTkFrame(dic)
     my_frame.pack(fill=BOTH, expand=1) 
     
     tree_scroll = Scrollbar(my_frame)
     tree_scroll.pack(side=RIGHT, fill=Y)
 
-    style = ttk.Style()
-
-    style.theme_use('clam')
-
-    style.configure('Treeview',
-        background='#D3D3D3',
-        foreground='black',
-        rowheight=20,
-        fieldbackground='silver',
-        )
-
-    style.map('Treeview',
-        background=[('selected', 'blue')])
-
     my_tree = ttk.Treeview(my_frame, yscrollcommand=tree_scroll.set, selectmode='extended')
     tree_scroll.config(command=my_tree.yview)
-
-
 
 
     def file_open():
@@ -114,40 +84,43 @@ def open():
     my_menu.add_cascade(label='Import Spreadsheet', menu=file_menu)
     file_menu.add_command(label='Open', command=file_open)
 
-    button_quit2 = Button(dic, text="Exit Window", command=dic.destroy)
+    button_quit2 = customtkinter.CTkButton(dic, text="Exit Window", command=dic.destroy)
     button_quit2.pack()
 
 
-    my_label = Label(dic, text="")
+    my_label = customtkinter.CTkLabel(dic, text="")
     my_label.pack(pady=20)
 
-dic = Button(App, text='Python Dictionary', command=open)
+dic = customtkinter.CTkButton(App, text='Python Dictionary', command=open)
 dic.grid(row=10, column=0)
 
 
-button_quit = Button(App, text="Exit Program", command=App.destroy)
+button_quit = customtkinter.CTkButton(App, text="Exit Program", command=App.destroy)
 button_quit.grid(row=5, column=4, pady=5, sticky="nsew")
 
 _from = StringVar()
 _from.set(scales[0])
 from_menu = OptionMenu(App, _from, *scales)
 from_menu.grid(row=0, column=0, pady=5, sticky="nsew")
+from_menu.config(bg="black", fg="white")
+from_menu["menu"].config(bg="silver")
 
 
-lbl = Label(App, text=' convert to ')
+lbl = customtkinter.CTkLabel(App, text=' convert to ', text_color ="white")
 lbl.grid(row=0, column=1, pady=5, sticky="nsew")
 
 to_ = StringVar()
 to_.set(scales[0])
 to_menu = OptionMenu(App, to_, *scales)
 to_menu.grid(row=0, column=2, pady=5, sticky="nsew")
+to_menu.config(bg="black", fg="white")
+to_menu["menu"].config(bg="silver")
 
 
-
-enterL = Label(App, text='Enter your Value')
+enterL = customtkinter.CTkLabel(App, text='Enter your Value')
 enterL.grid(row=1, column=0, columnspan=2, pady=5, sticky="nsew")
 
-numE = Entry(App)
+numE = customtkinter.CTkEntry(App)
 numE.grid(row=1, column=2, columnspan=2, pady=5, sticky="nsew")
 
 
@@ -192,11 +165,11 @@ def converter():
         conv_num = 0
     
 
-    numL = Label(App, text=round(conv_num,2), width=10)
+    numL = customtkinter.CTkLabel(App, text=round(conv_num,2), width=10)
     numL.grid(row=1, column=4, pady=5)
 
 
-conB = Button(App, text='Convert', command=converter)
+conB = customtkinter.CTkButton(App, text='Convert', command=converter)
 conB.grid(row=2, column=0, padx=10, pady=5, columnspan=2)
 
 App.mainloop()
